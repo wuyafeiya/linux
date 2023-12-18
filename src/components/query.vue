@@ -1,0 +1,99 @@
+<script setup lang="ts">
+import {ref,reactive} from 'vue'
+import { useStore } from '../store/index';
+import { ElNotification } from 'element-plus'
+const store = useStore()
+function generateUniqueNumber() {
+  return Date.now() + Math.random();
+}
+const submit = () => {
+  console.log(form)
+  ElNotification({
+    title: '成功',
+    message: '插入规则成功',
+    type: 'success',
+  })
+  store.addData(form)
+}
+
+const form=reactive({
+  id:generateUniqueNumber,
+  name:'',
+  oldIP:'',
+  newIP:'',
+  oldPort:'',
+  newPort:'',
+  date:'OUTPUT',
+  action:'ACCEPT'
+})
+</script>
+<template>
+  <div class="addTable">
+    <h1>插入规则</h1>
+    <table style="  border-collapse: collapse;width: 100%;">
+      <tr>
+        <td style="width: 200px">链名:</td>
+        <td> <el-radio :label="'OUTPUT'" v-model="form.date">OUTPUT</el-radio></td>
+        <td> <el-radio :label="'INPUT'" v-model="form.date">INPUT</el-radio></td>
+      </tr>
+      <tr>
+        <td>协议类型:</td>
+        <td colspan="2">
+          <div style="display: flex;">
+            <div style="width: 80px;"></div>
+            <el-input v-model="form.name" placeholder="例:TCP UDP" clearable style="width: 200px;" />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>IP地址: </td>
+        <td>
+          <div style="display: flex;">
+            <div style="width: 80px;">源IP:</div>
+            <el-input v-model="form.oldIP" placeholder="192.168.x.x" clearable style="width: 200px;" />
+          </div>
+        </td>
+        <td>
+          <div style="display: flex;">
+            <div style="width: 80px;">目的IP:</div>
+            <el-input v-model="form.newIP" placeholder="192.168.x.x" clearable style="width: 200px;" />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>端口号: </td>
+        <td>
+          <div style="display: flex;">
+            <div style="width: 80px;">源端口:</div>
+            <el-input v-model="form.oldPort" placeholder="80" clearable style="width: 200px;" />
+          </div>
+        </td>
+        <td>
+          <div style="display: flex;">
+            <div style="width: 80px;">目的端口:</div>
+            <el-input v-model="form.newPort" placeholder="443" clearable style="width: 200px;" />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>动作: </td>
+        <td> <el-radio :label="'ACCEPT'" v-model="form.action">ACCEPT</el-radio></td>
+        <td> <el-radio :label="'DROP'" v-model="form.action">DROP</el-radio></td>
+      </tr>
+    </table>
+    <el-button type="primary" @click="submit" style="margin-top: 10px;">插入</el-button>
+  </div>
+</template>
+<style>
+.addTable {
+  /* width: 100%; */
+  flex: 1;
+}
+
+td,
+th {
+  border: 1px solid #6D6D6D;
+  height: 50px;
+  /* 设置单元格的边框样式 */
+}
+</style>
